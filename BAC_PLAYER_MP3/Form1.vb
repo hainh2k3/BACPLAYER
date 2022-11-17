@@ -1,8 +1,5 @@
-﻿Imports NAudio
+﻿Imports System.IO
 Imports NAudio.Wave
-Imports System.Security.Cryptography
-Imports System.Runtime.InteropServices
-Imports System.IO
 
 
 Public Class Form1
@@ -15,6 +12,7 @@ Public Class Form1
 
     Private timeStop As Integer = 1 * 60
     Private timeStart As Integer = 0
+    Private tatMay As Boolean = True
 
     Private Sub Form1_Load(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
 
@@ -25,28 +23,24 @@ Public Class Form1
         If parm.Length <= 1 Then Exit Sub
 
         timeStop = Convert.ToInt32(parm(2)) * 60
-        listMp3 = parm(3).Split(";")
+        tatMay = Convert.ToByte(parm(3))
+        listMp3 = parm(4).Split(";")
         'listMp3 = "E:\BACPLAYER\BACPLAYER\BAC_PLAYER_MP3\bin\Debug\NhacMp3\1.mp3;E:\BACPLAYER\BACPLAYER\BAC_PLAYER_MP3\bin\Debug\NhacMp3\3.mp3;E:\BACPLAYER\BACPLAYER\BAC_PLAYER_MP3\bin\Debug\NhacMp3\4.mp3".Split(";")
-        If Now.Hour <> 9 And Now.Hour <> 2 Then
-            If File.Exists(Path.Combine(Application.StartupPath, "NgaySinh.txt")) Then
-                fStream = New FileStream(Path.Combine(Application.StartupPath, "NgaySinh.txt"), FileMode.OpenOrCreate)
-                sReader = New StreamReader(fStream)
-                While Not sReader.EndOfStream
-                    Dim d As Object = sReader.ReadLine()
-                    If Convert.ToDateTime(d).Day = Today.Day And Convert.ToDateTime(d).Month = Today.Month Then
-                        listMp3(0) = "HappyBirthDay.mp3"
-                        Exit While
-                    End If
-                End While
-                sReader.Close()
-                fStream.Dispose()
-            End If
+        'If Now.Hour <> 9 And Now.Hour <> 2 Then
+        If File.Exists(Path.Combine(Application.StartupPath, "NgaySinh.txt")) Then
+            fStream = New FileStream(Path.Combine(Application.StartupPath, "NgaySinh.txt"), FileMode.OpenOrCreate)
+            sReader = New StreamReader(fStream)
+            While Not sReader.EndOfStream
+                Dim d As Object = sReader.ReadLine()
+                If Convert.ToDateTime(d).Day = Today.Day And Convert.ToDateTime(d).Month = Today.Month Then
+                    listMp3(0) = "HappyBirthDay.mp3"
+                    Exit While
+                End If
+            End While
+            sReader.Close()
+            fStream.Dispose()
         End If
-        
-
-
-
-
+        'End If
 
 
         If Convert.ToByte(parm(1) = 1) Then
@@ -117,7 +111,9 @@ Public Class Form1
             'For i As Integer = 0 To 101
             '    SendMessageW(Me.Handle, WM_APPCOMMAND, Me.Handle, New IntPtr(APPCOMMAND_VOLUME_DOWN))
             'Next
-            System.Diagnostics.Process.Start("shutdown", "-s -t 00")
+            If tatMay = True Then
+                System.Diagnostics.Process.Start("shutdown", "-s -t 00")
+            End If
             Application.Exit()
         End If
         Try
@@ -132,17 +128,21 @@ Public Class Form1
     End Sub
 
     Private Sub btnExit_Click(sender As System.Object, e As System.EventArgs) Handles btnExit.Click
-        If waveOutDevice.PlaybackState <> PlaybackState.Stopped Then waveOutDevice.Stop()
+        Try
+            If waveOutDevice.PlaybackState <> PlaybackState.Stopped Then waveOutDevice.Stop()
+        Catch ex As Exception
+        End Try
         Application.Exit()
     End Sub
 
 
-    Private Sub btnOpenFile_Click(sender As System.Object, e As System.EventArgs) Handles btnOpenFile.Click
+    Private Sub btnOpenFile_Click(sender As System.Object, e As System.EventArgs)
 
     End Sub
 
+    Private Sub btnPause_Click(sender As Object, e As EventArgs)
 
-
+    End Sub
 End Class
 
 

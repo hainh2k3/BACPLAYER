@@ -23,8 +23,6 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Me.btnOpenFile = New System.Windows.Forms.Button()
-        Me.btnPause = New System.Windows.Forms.Button()
         Me.btnExit = New System.Windows.Forms.Button()
         Me.lstBaiHat = New System.Windows.Forms.ListBox()
         Me.tm = New System.Windows.Forms.Timer(Me.components)
@@ -32,29 +30,9 @@ Partial Class Form1
         Me.lblThoiGian = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
-        'btnOpenFile
-        '
-        Me.btnOpenFile.Enabled = False
-        Me.btnOpenFile.Location = New System.Drawing.Point(12, 228)
-        Me.btnOpenFile.Name = "btnOpenFile"
-        Me.btnOpenFile.Size = New System.Drawing.Size(75, 26)
-        Me.btnOpenFile.TabIndex = 0
-        Me.btnOpenFile.Text = "Open file"
-        Me.btnOpenFile.UseVisualStyleBackColor = True
-        '
-        'btnPause
-        '
-        Me.btnPause.Enabled = False
-        Me.btnPause.Location = New System.Drawing.Point(103, 228)
-        Me.btnPause.Name = "btnPause"
-        Me.btnPause.Size = New System.Drawing.Size(75, 26)
-        Me.btnPause.TabIndex = 1
-        Me.btnPause.Text = "Pause"
-        Me.btnPause.UseVisualStyleBackColor = True
-        '
         'btnExit
         '
-        Me.btnExit.Location = New System.Drawing.Point(198, 228)
+        Me.btnExit.Location = New System.Drawing.Point(12, 228)
         Me.btnExit.Name = "btnExit"
         Me.btnExit.Size = New System.Drawing.Size(75, 26)
         Me.btnExit.TabIndex = 2
@@ -84,7 +62,7 @@ Partial Class Form1
         '
         Me.lblThoiGian.AutoSize = True
         Me.lblThoiGian.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.lblThoiGian.Location = New System.Drawing.Point(290, 235)
+        Me.lblThoiGian.Location = New System.Drawing.Point(104, 235)
         Me.lblThoiGian.Name = "lblThoiGian"
         Me.lblThoiGian.Size = New System.Drawing.Size(60, 13)
         Me.lblThoiGian.TabIndex = 5
@@ -99,8 +77,9 @@ Partial Class Form1
         Me.Controls.Add(Me.prc)
         Me.Controls.Add(Me.lstBaiHat)
         Me.Controls.Add(Me.btnExit)
-        Me.Controls.Add(Me.btnPause)
-        Me.Controls.Add(Me.btnOpenFile)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
+        Me.MaximizeBox = False
+        Me.MinimizeBox = False
         Me.Name = "Form1"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "BAC PLAYER MP3"
@@ -109,8 +88,6 @@ Partial Class Form1
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents btnOpenFile As System.Windows.Forms.Button
-    Friend WithEvents btnPause As System.Windows.Forms.Button
     Friend WithEvents btnExit As System.Windows.Forms.Button
     Friend WithEvents lstBaiHat As System.Windows.Forms.ListBox
     Friend WithEvents tm As System.Windows.Forms.Timer

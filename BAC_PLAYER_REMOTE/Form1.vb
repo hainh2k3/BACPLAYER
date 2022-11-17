@@ -67,6 +67,7 @@ Public Class Form1
         txtBatDau.Value = Now.AddMinutes(5)
         txtThoiGian.Value = 15
         chkPhatNgauNhien.Checked = False
+        chkTatMay.Checked = False
         chkThuHai.Checked = False
         chkThuBa.Checked = False
         chkThuTu.Checked = False
@@ -78,7 +79,7 @@ Public Class Form1
     End Sub
 
 
-    
+
 
     Public Sub New()
 
@@ -86,7 +87,7 @@ Public Class Form1
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-  
+
 
 
     End Sub
@@ -152,14 +153,14 @@ Public Class Form1
 
         For Each t As Task In taskServices.RootFolder.SubFolders("BACPLAYER").Tasks
             If e.Node.Level = 1 Then
-                If CType(t.Definition.Triggers(0), WeeklyTrigger).DaysOfWeek.ToString.ToLower = "alldays" Or _
+                If CType(t.Definition.Triggers(0), WeeklyTrigger).DaysOfWeek.ToString.ToLower = "alldays" Or
                     CType(t.Definition.Triggers(0), WeeklyTrigger).DaysOfWeek.ToString.ToLower.IndexOf(dayOfWeek.ToLower) >= 0 Then
-                    Dim item As New ListViewItem(New String() {t.Name, t.NextRunTime.ToString("HH:mm dd/MM/yyyy"), t.LastRunTime.ToString("HH:mm dd/MM/yyyy"), t.Definition.RegistrationInfo.Date.ToString("HH:mm dd/MM/yyyy")})
+                    Dim item As New ListViewItem(New String() {t.Name, t.NextRunTime.ToString("HH:mm dd/MM/yyyy"), t.LastRunTime.ToString("HH:mm dd/MM/yyyy"), ""})
                     item.Tag = t
                     lstTask.Items.Add(item)
                 End If
             Else
-                Dim item As New ListViewItem(New String() {t.Name, t.NextRunTime.ToString("HH:mm dd/MM/yyyy"), t.LastRunTime.ToString("HH:mm dd/MM/yyyy"), t.Definition.RegistrationInfo.Date.ToString("HH:mm dd/MM/yyyy")})
+                Dim item As New ListViewItem(New String() {t.Name, t.NextRunTime.ToString("HH:mm dd/MM/yyyy"), t.LastRunTime.ToString("HH:mm dd/MM/yyyy"), ""})
                 item.Tag = t
                 lstTask.Items.Add(item)
             End If
@@ -167,7 +168,7 @@ Public Class Form1
         taskServices.Dispose()
     End Sub
 
-  
+
     Private Sub lstTask_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles lstTask.SelectedIndexChanged
 
         If lstTask.SelectedItems.Count = 0 Then
@@ -206,22 +207,29 @@ Public Class Form1
             If strNgay.IndexOf("sunday") >= 0 Then chkChuNhat.Checked = True
         End If
 
-        Dim strParm As String = CType(t.Definition.Actions(0), ExecAction).Arguments
-        chkPhatNgauNhien.Checked = Convert.ToByte(strParm.Substring(0, 1))
-        Dim strTg As String = strParm.Substring(2)
-        strTg = strTg.Substring(0, strTg.IndexOf(" "))
-        txtThoiGian.Value = Convert.ToInt32(strTg)
 
-        lstMp3.Items.Clear()
         Try
-            Dim strMp3 As String = strParm.Substring(strParm.IndexOf("""") + 1)
-            strMp3 = strMp3.Substring(0, strMp3.Length - 1)
-            For Each s As String In strMp3.Split(";")
-                If s.Trim = "" Then Continue For
-                lstMp3.Items.Add(s)
-            Next
+            Dim strParm As String = CType(t.Definition.Actions(0), ExecAction).Arguments
+            chkPhatNgauNhien.Checked = Convert.ToByte(strParm.Substring(0, 1))
+            Dim strTg As String = strParm.Substring(2)
+            strTg = strTg.Substring(0, strTg.IndexOf(" "))
+            txtThoiGian.Value = Convert.ToInt32(strTg)
+            Dim strTatMay As String = strParm.Substring(2)
+            strTatMay = strTatMay.Substring(strTatMay.IndexOf(" ") + 1)
+            chkTatMay.Checked = Convert.ToByte(strTatMay.Substring(0, strTatMay.IndexOf(" ")))
+            lstMp3.Items.Clear()
+            Try
+                Dim strMp3 As String = strParm.Substring(strParm.IndexOf("""") + 1)
+                strMp3 = strMp3.Substring(0, strMp3.Length - 1)
+                For Each s As String In strMp3.Split(";")
+                    If s.Trim = "" Then Continue For
+                    lstMp3.Items.Add(s)
+                Next
+            Catch ex As Exception
+            End Try
         Catch ex As Exception
         End Try
+
 
 
     End Sub
@@ -254,7 +262,7 @@ Public Class Form1
             task.Definition.Triggers.Add(trig)
             Dim act As ExecAction = CType(task.Definition.Actions(0).Clone, ExecAction)
             act.Path = Application.StartupPath & "\BAC_PLAYER_MP3.exe"
-            act.Arguments = Convert.ToByte(chkPhatNgauNhien.Checked).ToString & " " & txtThoiGian.Value.ToString.Replace(",", "").Replace(".", "") & " "
+            act.Arguments = Convert.ToByte(chkPhatNgauNhien.Checked).ToString & " " & txtThoiGian.Value.ToString.Replace(",", "").Replace(".", "") & " " & Convert.ToByte(chkTatMay.Checked).ToString & " "
             Dim _lstNhac As String = ""
             For Each i As ListViewItem In lstMp3.Items
                 _lstNhac &= i.Text & ";"
@@ -303,7 +311,7 @@ Public Class Form1
                 task.Triggers.Add(trig)
                 Dim act As New ExecAction
                 act.Path = Application.StartupPath & "\BAC_PLAYER_MP3.exe"
-                act.Arguments = Convert.ToByte(chkPhatNgauNhien.Checked).ToString & " " & txtThoiGian.Value.ToString.Replace(",", "").Replace(".", "") & " "
+                act.Arguments = Convert.ToByte(chkPhatNgauNhien.Checked).ToString & " " & txtThoiGian.Value.ToString.Replace(",", "").Replace(".", "") & " " & Convert.ToByte(chkTatMay.Checked).ToString & " "
                 Dim _lstNhac As String = ""
                 For Each i As ListViewItem In lstMp3.Items
                     _lstNhac &= i.Text & ";"
@@ -408,7 +416,7 @@ Public Class Form1
     End Sub
 
 
- 
+
 
 
     Private Sub btnChayTacVu_Click(sender As System.Object, e As System.EventArgs) Handles btnChayTacVu.Click
