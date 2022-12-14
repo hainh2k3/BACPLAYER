@@ -525,9 +525,9 @@ Partial Class Form1
         Me.Label5.ForeColor = System.Drawing.Color.Black
         Me.Label5.Location = New System.Drawing.Point(309, 139)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(32, 16)
+        Me.Label5.Size = New System.Drawing.Size(33, 16)
         Me.Label5.TabIndex = 9
-        Me.Label5.Text = "phút"
+        Me.Label5.Text = "giây"
         '
         'txtThoiGian
         '

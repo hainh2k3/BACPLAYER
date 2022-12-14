@@ -10,7 +10,7 @@ Public Class Form1
     Private listMp3() As String
     Private indexMp3 As Integer
 
-    Private timeStop As Integer = 1 * 60
+    Private timeStop As Integer = 1
     Private timeStart As Integer = 0
     Private tatMay As Boolean = True
 
@@ -22,7 +22,7 @@ Public Class Form1
         Dim parm() As String = Environment.GetCommandLineArgs()
         If parm.Length <= 1 Then Exit Sub
 
-        timeStop = Convert.ToInt32(parm(2)) * 60
+        timeStop = Convert.ToInt32(parm(2))
         tatMay = Convert.ToByte(parm(3))
         listMp3 = parm(4).Split(";")
         'listMp3 = "E:\BACPLAYER\BACPLAYER\BAC_PLAYER_MP3\bin\Debug\NhacMp3\1.mp3;E:\BACPLAYER\BACPLAYER\BAC_PLAYER_MP3\bin\Debug\NhacMp3\3.mp3;E:\BACPLAYER\BACPLAYER\BAC_PLAYER_MP3\bin\Debug\NhacMp3\4.mp3".Split(";")
@@ -64,7 +64,7 @@ Public Class Form1
         Next
 
         waveOutDevice = New WaveOut()
-        waveOutDevice.Volume = 0.0F
+        waveOutDevice.Volume = 0.2F
         indexMp3 = 0
         AddHandler waveOutDevice.PlaybackStopped, AddressOf NextSong
         NextSong(waveOutDevice, New StoppedEventArgs())
@@ -104,7 +104,9 @@ Public Class Form1
         prc.Value = timeStart
 
         timeStart += 1
-        lblThoiGian.Text = Math.Floor((timeStart / 60)) & ":" & Math.Round((timeStart Mod 60), 0, MidpointRounding.AwayFromZero) & "s / " & (timeStop / 60) & " phút"
+        'lblThoiGian.Text = Math.Floor((timeStart / 60)) & ":" & Math.Round((timeStart Mod 60), 0, MidpointRounding.AwayFromZero) & "s / " & (timeStop / 60) & " phút"
+        lblThoiGian.Text = timeStart & "s / " & timeStop & "s"
+
 
         If timeStart > timeStop Then
             If waveOutDevice.PlaybackState <> PlaybackState.Stopped Then waveOutDevice.Stop()
@@ -117,11 +119,11 @@ Public Class Form1
             Application.Exit()
         End If
         Try
-            If timeStart < 10 Then waveOutDevice.Volume += 0.1F
+            If timeStart <= 4 Then waveOutDevice.Volume += 0.2F
         Catch ex As Exception
         End Try
         Try
-            If timeStart > timeStop - 20 Then waveOutDevice.Volume -= 0.05F
+            If timeStart >= timeStop - 5 Then waveOutDevice.Volume -= 0.1F
         Catch ex As Exception
         End Try
 
